@@ -93,7 +93,7 @@ export const MOVIES = [
   { id:'loki2', era:'fora do tempo', title:'Loki — 2ª Temporada', year:2023, runtime:290, kind:'Série · 6 Ep', phase:'FASE 5', universe:'mcu', essential:true, multiverse:true, tags:[['Âncora do Multiverso','emerald'],['Tear Temporal','steel']], brief:'Um novo deus passa a sustentar os ramos.' },
   { id:'whatif2', era:'fora do tempo', title:'What If...? — 2ª Temporada', year:2023, runtime:300, kind:'Série · 9 Ep', phase:'FASE 5', universe:'mcu', essential:false, multiverse:true, tags:[['Catálogo de Variantes','steel']], brief:'Mais realidades vigiadas pelo Vigia.' },
   { id:'whatif3', era:'fora do tempo', title:'What If...? — 3ª Temporada', year:2024, runtime:260, kind:'Série · 8 Ep', phase:'FASE 5', universe:'mcu', essential:false, multiverse:true, tags:[['Catálogo de Variantes','steel']], brief:'O último arquivo do Vigia.' },
-  { id:'dw', era:'2024 · Terra-10005', title:'Deadpool & Wolverine', year:2024, runtime:128, kind:'Filme', phase:'FASE 5', universe:'mcu', essential:true, multiverse:true, tags:[['Protocolo do Ser Âncora','emerald'],['Risco de Incursão: Médio','gold']], brief:'A AVT poda uma linha do tempo moribunda. O Vazio cresce.' },
+  { id:'dw', era:'2024', title:'Deadpool & Wolverine', year:2024, runtime:128, kind:'Filme', phase:'FASE 5', universe:'mcu', essential:true, multiverse:true, tags:[['Protocolo do Ser Âncora','emerald'],['Risco de Incursão: Médio','gold']], brief:'A AVT poda uma linha do tempo moribunda. O Vazio cresce.' },
   { id:'agatha', era:'2026', title:'Agatha Desde Sempre', year:2024, runtime:330, kind:'Série · 9 Ep', phase:'FASE 5', universe:'mcu', essential:false, multiverse:false, tags:[['Estrada das Bruxas','steel']], brief:'Agatha Harkness busca recuperar seus poderes.' },
   { id:'daredevil', era:'2026', title:'Demolidor: Renascido', year:2025, runtime:400, kind:'Série · 9 Ep', phase:'FASE 5', universe:'mcu', essential:false, multiverse:false, tags:[['Hell\'s Kitchen','steel']], brief:'Matt Murdock contra o prefeito Wilson Fisk.' },
   { id:'bnw', era:'2027', title:'Capitão América: Admirável Mundo Novo', year:2025, runtime:118, kind:'Filme', phase:'FASE 5', universe:'mcu', essential:true, multiverse:false, tags:[['Hulk Vermelho','steel']], brief:'Sam Wilson como Capitão América diante do Presidente Ross.' },
@@ -182,3 +182,28 @@ export const DOOM_LINES = {
   bnd: 'Esquecido por todos. Destino não esquece.',
   doomsday: 'Ajoelhem-se. O soberano chegou.',
 };
+
+// ── Terras (universos) ────────────────────────────────────────────────────
+// O tronco da linha do tempo é a Terra-616 (MCU). As demais Terras aparecem
+// como portais que se abrem no ponto em que cruzam com a 616 (`attach`).
+export const EARTHS = {
+  '616':    { name: 'Terra-616',    label: 'Linha do Tempo Sagrada · MCU' },
+  'watcher':{ name: 'Multiverso',   label: 'Arquivos do Vigia (What If…?)',        attach: 'loki1' },
+  '96283':  { name: 'Terra-96283',  label: 'Homem-Aranha de Sam Raimi',            attach: 'nwh' },
+  '120703': { name: 'Terra-120703', label: 'O Espetacular Homem-Aranha',           attach: 'nwh' },
+  '92131':  { name: 'Terra-92131',  label: "X-Men: A Série Animada ('97)",         attach: 'marvels' },
+  '10005':  { name: 'Terra-10005',  label: 'X-Men da Fox',                         attach: 'loki2' },
+  '121698': { name: 'Terra-121698', label: 'Quarteto Fantástico (2005–2007)',      attach: 'loki2' },
+  '828':    { name: 'Terra-828',    label: 'Quarteto Fantástico: Primeiros Passos', attach: 'tbolts' },
+};
+const EARTH_OF = {
+  firstclass: '10005', dofp: '10005', apocalypse: '10005', darkphoenix: '10005', xmen: '10005', x2: '10005',
+  x3: '10005', wolverine: '10005', deadpool: '10005', deadpool2: '10005', dw: '10005', logan: '10005',
+  ff2005: '121698', ff2007: '121698',
+  spider1: '96283', spider2: '96283', spider3: '96283',
+  asm: '120703', asm2: '120703',
+  xmen97: '92131',
+  ff: '828',
+  whatif1: 'watcher', whatif2: 'watcher', whatif3: 'watcher',
+};
+for (const m of MOVIES) m.earth = EARTH_OF[m.id] || '616';

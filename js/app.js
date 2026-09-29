@@ -1,9 +1,9 @@
-import { MOVIES, RELEASE_DATE, DOOM_LINES } from './movies.js?v=11';
-import { createStore, friendlyError } from './store.js?v=11';
-import { loadPosters } from './posters.js?v=11';
+import { MOVIES, RELEASE_DATE, DOOM_LINES, EARTHS } from './movies.js?v=12';
+import { createStore, friendlyError } from './store.js?v=12';
+import { loadPosters } from './posters.js?v=12';
 
 const $ = sel => document.querySelector(sel);
-const PREFS_KEY = 'doomProtocol.prefs.v3';
+const PREFS_KEY = 'doomProtocol.prefs.v4';
 const AVATAR_COLORS = ['#6CFF9A', '#D8B878', '#7FB2E5', '#F0A092', '#B69CF0', '#6FD3D8', '#F2A65A', '#9BD46A'];
 
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -22,23 +22,40 @@ const ESS_RELEASED = ESSENTIALS.filter(m => !m.unreleased);
 const BRANCHES = MOVIES.filter(m => !m.essential);
 const isSeries = m => m.kind.startsWith('Série');
 
-// Cada grupo de ramificações fica logo ANTES do essencial que o encerra
-// (tudo o que saiu entre o essencial anterior e ele). O que vier depois do
-// último essencial lançado forma um grupo antes de Doomsday.
+// Tronco = Terra-616. Cada grupo de ramificações fica logo ANTES do essencial
+// da 616 que o encerra (o que se passa entre o essencial anterior e ele).
+const TRUNK = MOVIES.filter(m => m.earth === '616');
+const TRUNK_ESS = TRUNK.filter(m => m.essential);
 const GROUPS = (() => {
   const out = new Map(); let buf = [];
-  for (const m of MOVIES) {
+  for (const m of TRUNK) {
     if (m.essential) { if (buf.length) out.set(m.id, buf); buf = []; }
     else buf.push(m);
   }
   return out; // essencialId -> [ramificações antes dele]
 })();
+const groupOf = id => [...GROUPS].find(([, items]) => items.some(m => m.id === id))?.[0];
+
+// Portais para as outras Terras. Ficam logo depois do título onde a Terra
+// cruza com a 616; se esse título estiver dentro de um grupo, depois do grupo.
+const EARTH_ITEMS = new Map(Object.keys(EARTHS).filter(e => e !== '616').map(e => [e, MOVIES.filter(m => m.earth === e)]));
+const PORTALS = new Map(); // 'pre:<essId>' | 'post:<essId>' -> [earthId]
+for (const [e] of EARTH_ITEMS) {
+  const a = MOVIES[INDEX.get(EARTHS[e].attach)];
+  const slot = a.essential ? `post:${a.id}` : `pre:${groupOf(a.id)}`;
+  PORTALS.set(slot, [...(PORTALS.get(slot) || []), e]);
+}
+// Chave do galho/portal que contém o título (null = card do tronco).
+const keyFor = m => m.earth !== '616' ? `e:${m.earth}` : m.essential ? null : groupOf(m.id);
+const ALL_KEYS = [...GROUPS.keys(), ...[...EARTH_ITEMS.keys()].map(e => `e:${e}`)];
 
 // ── Estado ───────────────────────────────────────────────────────────────
 const prefs = (() => {
   let p = null;
   try { p = JSON.parse(localStorage.getItem(PREFS_KEY)); } catch {}
-  return { focusId: p?.focusId ?? null, open: Array.isArray(p?.open) ? p.open : [] };
+  // Por padrão, abre as Terras que têm essenciais.
+  const dflt = [...EARTH_ITEMS].filter(([, items]) => items.some(m => m.essential)).map(([e]) => `e:${e}`);
+  return { focusId: p?.focusId ?? null, open: Array.isArray(p?.open) ? p.open : dflt };
 })();
 const savePrefs = () => { try { localStorage.setItem(PREFS_KEY, JSON.stringify(prefs)); } catch {} };
 const isOpen = key => prefs.open.includes(key);
@@ -133,6 +150,7 @@ function essCardHTML(m, n, nextId) {
       <div class="card-top">
         <span class="kicker" style="letter-spacing:.14em">ESSENCIAL ${pad(n + 1)} / ${pad(ESSENTIALS.length)}</span>
         <span class="chip phase">${esc(m.phase)}</span>
+        <span class="chip earth">${esc(EARTHS[m.earth].name)}</span>
         ${m.id === nextId ? '<span class="chip next">Próximo</span>' : ''}
       </div>
       ${w ? '<div class="crest" title="Conquistado"><div><b>LV</b><small>CONQ.</small></div></div>' : ''}
@@ -159,10 +177,12 @@ function branchCardHTML(m) {
   const { watched, ratings } = mine();
   const w = !!watched[m.id], r = validRating(ratings[m.id]);
   const g = groupStats(m);
-  return `<article class="bcard${w ? ' done' : ''}">
+  const n = ESSENTIALS.indexOf(m);
+  return `<article class="bcard${w ? ' done' : ''}${m.essential ? ' ess' : ''}">
     <div class="bposter">${posterHTML(m)}</div>
     <div class="bbody">
-      <div class="kicker">Época ${esc(m.era)} · ${esc(m.phase)} · lançado em ${m.year}${m.runtime ? ' · ' + hm(m.runtime) : ''}</div>
+      ${m.essential ? `<div><span class="chip essb">Essencial ${pad(n + 1)} / ${pad(ESSENTIALS.length)}</span></div>` : ''}
+      <div class="kicker">Época ${esc(m.era)} · ${m.earth === '616' ? esc(m.phase) : esc(EARTHS[m.earth].name)} · lançado em ${m.year}${m.runtime ? ' · ' + hm(m.runtime) : ''}</div>
       <h3>${esc(m.title)}</h3>
       <div class="bcontrols">
         <button type="button" class="conquer sm${w ? ' on' : ''}" data-action="toggle" data-id="${m.id}" aria-pressed="${w}">${w ? CHECK + 'Conquistado' : 'Conquistar'}</button>
@@ -183,18 +203,33 @@ function computeGeo() {
 }
 const nextTargetId = () => { const { watched } = mine(); return ESSENTIALS.find(m => !m.unreleased && !watched[m.id])?.id; };
 
-function groupHeadHTML(key, items) {
+function groupHeadHTML(key, items, earth) {
   const { watched } = mine();
   const done = items.filter(m => watched[m.id]).length;
   const open = isOpen(key);
+  const ess = items.filter(m => m.essential).length;
+  const title = earth
+    ? `<span class="ename">${esc(EARTHS[earth].name)}</span><span class="elabel">${esc(EARTHS[earth].label)}</span>${ess ? `<span class="bess">${ess} essencia${ess > 1 ? 'is' : 'l'}</span>` : ''}`
+    : `<span>${items.length} ramificaç${items.length > 1 ? 'ões' : 'ão'}</span>`;
+  const names = earth ? '' : `<span class="bnames">${esc(items.slice(0, 3).map(m => m.title).join(' · '))}${items.length > 3 ? ' …' : ''}</span>`;
   return `<div class="bgroup-head">
       <div class="node-col" style="width:${130 * geo.k}px"></div>
-      <button type="button" class="bgroup-toggle${open ? ' open' : ''}${done === items.length ? ' all' : ''}" data-action="group" data-key="${key}" aria-expanded="${open}">
-        ${CHEV}<span>${items.length} ramificaç${items.length > 1 ? 'ões' : 'ão'}</span><span class="bcount">${done}/${items.length}</span>
-        <span class="bnames">${esc(items.slice(0, 3).map(m => m.title).join(' · '))}${items.length > 3 ? ' …' : ''}</span>
+      <button type="button" class="bgroup-toggle${earth ? ' portal-toggle' : ''}${open ? ' open' : ''}${done === items.length ? ' all' : ''}" data-action="group" data-key="${key}" aria-expanded="${open}" ${earth ? `title="Portal para a ${esc(EARTHS[earth].name)}"` : ''}>
+        ${CHEV}${title}<span class="bcount">${done}/${items.length}</span>${names}
       </button>
     </div>`;
 }
+
+function branchBlockHTML(key, items, earth) {
+  const k = geo.k;
+  let html = `<div class="bgroup${earth ? ' portal' : ''}" data-key="${key}">${groupHeadHTML(key, items, earth)}`;
+  if (isOpen(key)) html += items.map(b => `<div class="bitem" data-id="${b.id}">
+      <div class="node-col" style="width:${130 * k}px"><button type="button" class="orb sm${earth ? ' portal-orb' : ''}" data-action="focus" data-id="${b.id}" aria-label="Ir para ${esc(b.title)}"></button></div>
+      <div class="bcard-wrap" data-id="${b.id}">${branchCardHTML(b)}</div>
+    </div>`).join('');
+  return html + '</div>';
+}
+const portalsHTML = slot => (PORTALS.get(slot) || []).map(e => branchBlockHTML(`e:${e}`, EARTH_ITEMS.get(e), e)).join('');
 
 // Monta (ou remonta) toda a trilha. `anchor` mantém um elemento parado na tela.
 function buildTrack(anchor) {
@@ -207,16 +242,11 @@ function buildTrack(anchor) {
   inner.style.padding = `${padT}px ${narrow ? '12px' : 'clamp(20px,3vw,44px)'} ${padT}px var(--track-pl)`;
 
   let html = '';
-  ESSENTIALS.forEach((m, n) => {
+  TRUNK_ESS.forEach(m => {
+    const n = ESSENTIALS.indexOf(m);
     const items = GROUPS.get(m.id);
-    if (items) {
-      html += `<div class="bgroup" data-key="${m.id}">${groupHeadHTML(m.id, items)}`;
-      if (isOpen(m.id)) html += items.map(b => `<div class="bitem" data-id="${b.id}">
-          <div class="node-col" style="width:${130 * k}px"><button type="button" class="orb sm" data-action="focus" data-id="${b.id}" aria-label="Ir para ${esc(b.title)}"></button></div>
-          <div class="bcard-wrap" data-id="${b.id}">${branchCardHTML(b)}</div>
-        </div>`).join('');
-      html += '</div>';
-    }
+    if (items) html += branchBlockHTML(m.id, items);
+    html += portalsHTML(`pre:${m.id}`);
     html += `<div class="item" style="height:${H}px" data-id="${m.id}">
         <div class="node-col" style="width:${130 * k}px">
           <button type="button" class="orb" data-action="focus" data-id="${m.id}" title="${esc(m.title)}" aria-label="Ir para ${esc(m.title)}"></button>
@@ -224,11 +254,14 @@ function buildTrack(anchor) {
         </div>
         <div class="card-wrap" data-id="${m.id}">${essCardHTML(m, n, nextId)}</div>
       </div>`;
+    html += portalsHTML(`post:${m.id}`);
   });
   inner.innerHTML = html;
 
   // Mede posições reais e desenha a árvore.
-  const top = el => el.offsetTop + el.offsetHeight / 2;
+  // Centro vertical de um elemento em coordenadas da trilha (independe de offsetParent).
+  const base = inner.getBoundingClientRect().top;
+  const top = el => { const r = el.getBoundingClientRect(); return r.top - base + r.height / 2; };
   focus = [...inner.querySelectorAll('.item, .bitem')].map(el => {
     const m = MOVIES[INDEX.get(el.dataset.id)];
     return { m, ess: el.classList.contains('item'), el, wrap: el.querySelector('.card-wrap, .bcard-wrap'), orb: el.querySelector('.orb'), seq: el.querySelector('.seq-label'), cy: top(el) };
@@ -242,21 +275,27 @@ function buildTrack(anchor) {
   const firstY = focus[0].cy, lastY = focus[focus.length - 1].cy;
   const y0 = Math.max(10, firstY - H / 2 + 10), y1 = lastY + 70;
   const skip = [];
-  let side = '';
+  let side = '', pside = '';
   inner.querySelectorAll('.bgroup').forEach(g => {
+    const portal = g.classList.contains('portal');
+    let d = '';
     const headEl = g.querySelector('.bgroup-head');
-    const hy = headEl.offsetTop + headEl.offsetHeight / 2;
+    const hy = top(headEl);
     const kids = [...g.querySelectorAll('.bitem')].map(top);
     const tx = trunkX(hy - 26, k);
     // Brotinho que sai do tronco até o botão do grupo.
-    side += ` M${f1(tx)},${f1(hy - 26)} Q${f1(tx + 20 * k)},${f1(hy - 6)} ${f1(tx + 44 * k)},${f1(hy)}`;
+    d += ` M${f1(tx)},${f1(hy - 26)} Q${f1(tx + 20 * k)},${f1(hy - 6)} ${f1(tx + 44 * k)},${f1(hy)}`;
     if (kids.length) {
       const last = kids[kids.length - 1];
       skip.push([hy - 30, last + 30]);
-      side += ` M${f1(tx)},${f1(hy - 26)} C${f1(tx + 34 * k)},${f1(hy)} ${f1(sideX(kids[0]))},${f1(kids[0] - 40)} ${f1(sideX(kids[0]))},${f1(kids[0])}`;
-      for (let y = kids[0] + 12; y < last; y += 12) side += ` L${f1(sideX(y))},${f1(y)}`;
-      side += ` L${f1(sideX(last))},${f1(last)} Q${f1(sideX(last))},${f1(last + 36)} ${f1(trunkX(last + 60, k))},${f1(last + 60)}`;
+      d += ` M${f1(tx)},${f1(hy - 26)} C${f1(tx + 34 * k)},${f1(hy)} ${f1(sideX(kids[0]))},${f1(kids[0] - 40)} ${f1(sideX(kids[0]))},${f1(kids[0])}`;
+      for (let y = kids[0] + 12; y < last; y += 12) d += ` L${f1(sideX(y))},${f1(y)}`;
+      // Galhos de outras Terras não voltam ao tronco: terminam num broto solto.
+      d += portal
+        ? ` L${f1(sideX(last))},${f1(last + 30)} M${f1(sideX(last))},${f1(last + 14)} L${f1(sideX(last) + 10 * k)},${f1(last + 2)}`
+        : ` L${f1(sideX(last))},${f1(last)} Q${f1(sideX(last))},${f1(last + 36)} ${f1(trunkX(last + 60, k))},${f1(last + 60)}`;
     }
+    if (portal) pside += d; else side += d;
   });
   const trunk = trunkPath(y0, y1, k), tw = twigsPath(y0 + 10, y1 - 10, k, skip);
   const svgH = Math.ceil(inner.scrollHeight);
@@ -264,12 +303,15 @@ function buildTrack(anchor) {
       <defs><clipPath id="lit-clip"><rect x="-40" y="0" width="${200 * k + 80}" height="0"></rect></clipPath></defs>
       <path d="${tw}" fill="none" stroke="#1D5A3C" stroke-width="1.2" stroke-linecap="round" opacity=".55"></path>
       <path d="${side}" fill="none" stroke="#1D5A3C" stroke-width="1.8" stroke-linecap="round" opacity=".8"></path>
+      <path d="${pside}" fill="none" stroke="#5A4A22" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="1 5" opacity=".9"></path>
       <path d="${trunk}" fill="none" stroke="#1D5A3C" stroke-width="2" stroke-linecap="round" opacity=".8"></path>
       <g clip-path="url(#lit-clip)">
         <path d="${tw}" fill="none" stroke="#6CFF9A" stroke-width="4" stroke-linecap="round" opacity=".16"></path>
         <path d="${tw}" fill="none" stroke="#9CFFB8" stroke-width="1.3" stroke-linecap="round" opacity=".95"></path>
         <path d="${side}" fill="none" stroke="#6CFF9A" stroke-width="6" stroke-linecap="round" opacity=".16"></path>
         <path d="${side}" fill="none" stroke="#C8FFD8" stroke-width="1.6" stroke-linecap="round"></path>
+        <path d="${pside}" fill="none" stroke="#C5A059" stroke-width="6" stroke-linecap="round" opacity=".18"></path>
+        <path d="${pside}" fill="none" stroke="#F4E8CC" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="1 5"></path>
         <path d="${trunk}" fill="none" stroke="#6CFF9A" stroke-width="10" stroke-linecap="round" opacity=".14"></path>
         <path d="${trunk}" fill="none" stroke="#6CFF9A" stroke-width="4" stroke-linecap="round" opacity=".6"></path>
         <path d="${trunk}" fill="none" stroke="#F2FFE9" stroke-width="1.6" stroke-linecap="round"></path>
@@ -281,7 +323,7 @@ function buildTrack(anchor) {
   if (anchor?.id) {
     const el = anchor.id.startsWith('g:') ? inner.querySelector(`.bgroup[data-key="${anchor.id.slice(2)}"] .bgroup-head`) : inner.querySelector(`[data-id="${anchor.id}"].item, [data-id="${anchor.id}"].bitem`);
     if (el && prevTop != null) track.scrollTop += el.getBoundingClientRect().top - prevTop;
-    else if (el) track.scrollTop = el.offsetTop + el.offsetHeight / 2 - geo.ch / 2;
+    else if (el) track.scrollTop = el.getBoundingClientRect().top - inner.getBoundingClientRect().top + el.offsetHeight / 2 - geo.ch / 2;
   } else if (anchor?.scrollTop != null) {
     track.scrollTop = anchor.scrollTop;
   }
@@ -329,8 +371,8 @@ function goTo(i) {
 function goToId(id) {
   let i = focus.findIndex(f => f.m.id === id);
   if (i < 0) {
-    // Ramificação fechada: abre o grupo dela e depois vai até ela.
-    const key = [...GROUPS].find(([, items]) => items.some(m => m.id === id))?.[0];
+    // Ramificação ou Terra fechada: abre o galho dela e depois vai até ela.
+    const key = keyFor(MOVIES[INDEX.get(id)]);
     if (!key) return;
     prefs.open.push(key); savePrefs();
     buildTrack({ scrollTop: $('#track').scrollTop });
@@ -351,8 +393,8 @@ function renderHeader() {
   const { watched } = mine();
   const bDone = BRANCHES.filter(m => watched[m.id]).length;
   const eDone = ESS_RELEASED.filter(m => watched[m.id]).length;
-  const allOpen = prefs.open.length >= GROUPS.size;
-  $('#timeline-info').innerHTML = `<span class="tl-chip">Linha Sagrada</span>
+  const allOpen = ALL_KEYS.every(isOpen);
+  $('#timeline-info').innerHTML = `<span class="tl-chip">Terra-616</span>
     <span class="tl-stat"><b>${eDone}/${ESS_RELEASED.length}</b> essenciais</span>
     <span class="tl-stat"><b>${bDone}/${BRANCHES.length}</b> ramificações</span>
     <button type="button" class="tl-btn" data-action="all-groups">${allOpen ? 'Recolher todas' : 'Abrir todas'}</button>`;
@@ -381,10 +423,8 @@ function renderAside() {
   const remE = pendingE.reduce((s, m) => s + (m.runtime || 0), 0);
   const remB = pendingB.reduce((s, m) => s + (m.runtime || 0), 0);
 
-  // "Posição" = essencial em foco, ou o essencial logo abaixo do grupo em foco.
-  const nearEss = essIdx >= 0 ? essIdx : ESSENTIALS.indexOf(ESSENTIALS.find(e => GROUPS.get(e.id)?.includes(f)));
-  const label = essIdx >= 0 ? `${pad(essIdx + 1)} / ${pad(ESSENTIALS.length)}` : 'RAMIFICAÇÃO';
-  $('#counter').textContent = essIdx >= 0 ? `${pad(essIdx + 1)} / ${pad(ESSENTIALS.length)}` : `RAMO · ${pad(nearEss + 1)}`;
+  const label = essIdx >= 0 ? `${pad(essIdx + 1)} / ${pad(ESSENTIALS.length)}` : f.earth === '616' ? 'RAMIFICAÇÃO' : EARTHS[f.earth].name.toUpperCase();
+  $('#counter').textContent = essIdx >= 0 ? label : f.earth === '616' ? 'TERRA-616 · RAMO' : label;
   $('#sheet-pct').textContent = pct + '%';
 
   const fi = INDEX.get(f.id);
@@ -486,7 +526,7 @@ document.addEventListener('click', e => {
     case 'group': toggleGroup(el.dataset.key); break;
     case 'all-groups': {
       const f = focus[active];
-      prefs.open = prefs.open.length >= GROUPS.size ? [] : [...GROUPS.keys()];
+      prefs.open = ALL_KEYS.every(isOpen) ? [] : [...ALL_KEYS];
       savePrefs();
       buildTrack(f?.ess ? { id: f.m.id, el: f.el } : { id: nearestEssId() });
       break;
@@ -582,7 +622,7 @@ function showScreen(user) {
       if (!everyone.has(me.uid)) everyone.set(me.uid, { uid: me.uid, username: me.username, watched: {}, ratings: {} });
       if (!geo) {
         const id = MOVIES.some(m => m.id === prefs.focusId) ? prefs.focusId : nextTargetId() || ESSENTIALS[0].id;
-        const key = [...GROUPS].find(([, items]) => items.some(m => m.id === id))?.[0];
+        const key = keyFor(MOVIES[INDEX.get(id)]);
         if (key && !isOpen(key)) prefs.open.push(key);
         buildTrack({ id });
       } else {

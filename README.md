@@ -5,7 +5,12 @@ Site para você e seus amigos marcarem os filmes e séries que precisam ver ante
 - Contas com **usuário + senha** (sem e-mail real)
 - Linha do tempo em estilo *scrollytelling* (galho do multiverso que acende conforme você rola, um título em foco por vez; setas ↑/↓ também navegam)
 - **Tronco principal com os 17 essenciais** da lista oficial da Disney (X-Men, X2, Capitão América: O Primeiro Vingador, Os Vingadores, Guerra Infinita, Ultimato, Loki T1 e T2, Shang-Chi, Sem Volta para Casa, Multiverso da Loucura, Wakanda para Sempre, Deadpool & Wolverine, Admirável Mundo Novo, Thunderbolts*, Quarteto Fantástico: Primeiros Passos e o próprio Doomsday)
-- **57 ramificações**: o resto do MCU, Fox e Sony aparece em galhos recolhíveis entre os essenciais
+- **Terras**: o tronco é a **Terra-616** (MCU). Os títulos 616 não essenciais ficam em galhos recolhíveis entre os essenciais, e cada outro universo vira um **portal** dourado que sai do ponto onde cruza com a 616:
+  - Terra-10005 (X-Men da Fox, Deadpool, Logan) e Terra-121698 (Quarteto Fantástico 2005/07) → em Loki T2
+  - Terra-96283 (Homem-Aranha de Sam Raimi) e Terra-120703 (O Espetacular Homem-Aranha) → em Sem Volta para Casa
+  - Terra-92131 (X-Men '97) → em As Marvels · Multiverso do Vigia (What If…?) → em Loki T1
+  - Terra-828 (Quarteto Fantástico: Primeiros Passos) → em Thunderbolts*, antes de Doomsday
+  - Os essenciais de outras Terras (X-Men, X2, Deadpool & Wolverine, Primeiros Passos) aparecem nos portais com destaque, e esses portais já vêm abertos
 - Tudo em **ordem cronológica da história** (MCU pela linha do tempo do Disney+; Fox/Sony pelo ano em que se passam), com a época de cada título
 - Nota de 1 a 5 estrelas; em cada título aparece a **média do grupo** e quem já assistiu
 - Painel lateral: sua nota média, tempo que falta assistir, próximo alvo, **ranking dos amigos** ("Conselho de Latvéria") e contagem regressiva
@@ -43,13 +48,13 @@ Sem configurar o Firebase, o site roda em **modo demo**: as contas e notas ficam
 
 ## Personalizar
 
-- **Lista de títulos**: [`js/movies.js`](js/movies.js). Cada item tem `essential` (tronco principal ou ramificação), `universe`, tags e resumo. Não mude o `id` de um título depois que o pessoal já avaliou (as notas ficam presas a ele).
+- **Lista de títulos**: [`js/movies.js`](js/movies.js). Cada item tem `essential`, `era`, tags e resumo; a Terra de cada título e onde cada portal se liga ficam em `EARTHS`/`EARTH_OF` no fim do arquivo. Não mude o `id` de um título depois que o pessoal já avaliou (as notas ficam presas a ele).
 - **Pôsteres**: o site busca sozinho a imagem principal da página de cada título na Wikipedia (em inglês), direto do navegador e sem chave, e guarda em cache por 7 dias. Os nomes das páginas estão em [`js/posters.js`](js/posters.js). Se algum não carregar (ou vier errado), ajuste o nome da página ali ou force uma imagem com `poster: 'https://…'` no item em `js/movies.js`. Sem imagem, o card mostra uma capa gerada no estilo do site.
 - **Visual**: [`css/doom.css`](css/doom.css). Frases do "Arquivo Doom" de cada título: `DOOM_LINES` em `js/movies.js`.
 
 ## Publicar uma mudança
 
-O GitHub Pages deixa os arquivos em cache por alguns minutos. Para ninguém ficar com uma mistura de versão nova e antiga, aumente o número `?v=` (hoje `11`) em todos os lugares onde ele aparece — `index.html`, `js/app.js` e `js/store.js` (busque por `?v=`).
+O GitHub Pages deixa os arquivos em cache por alguns minutos. Para ninguém ficar com uma mistura de versão nova e antiga, aumente o número `?v=` (hoje `12`) em todos os lugares onde ele aparece — `index.html`, `js/app.js` e `js/store.js` (busque por `?v=`).
 
 ## Estrutura
 
