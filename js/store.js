@@ -32,6 +32,9 @@ const AUTH_ERRORS = {
   'auth/missing-password': 'Digite a senha.',
   'auth/too-many-requests': 'Muitas tentativas. Espere um pouco e tente de novo.',
   'auth/network-request-failed': 'Sem conexão com o servidor. Verifique sua internet.',
+  'auth/api-key-not-valid.-please-pass-a-valid-api-key.': 'Chave do Firebase inválida. Confira o apiKey em js/firebase-config.js.',
+  'auth/unauthorized-domain': 'Este endereço não está autorizado no Firebase (Authentication › Configurações › Domínios autorizados).',
+  'permission-denied': 'O banco recusou o acesso. Confira se as regras de firestore.rules foram publicadas.',
   'auth/operation-not-allowed': 'Ative o login por E-mail/senha no Firebase (Authentication › Sign-in method).',
 };
 
