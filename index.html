@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Doom Protocol · Rumo a Doomsday</title>
+<meta name="description" content="Checklist e notas dos filmes e séries para assistir antes de Vingadores: Doomsday — com os amigos.">
+<meta name="theme-color" content="#0F1115">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 34' fill='none' stroke='%23D4AF37' stroke-width='1.5' stroke-linejoin='round'%3E%3Cpath d='M3 5 Q15 0 27 5 L27 20 Q27 29 15 33 Q3 29 3 20 Z' fill='%230F1115'/%3E%3Cpath d='M7 13 L13 14.5 L13 16 L7 15.5 Z' fill='%233FD69A' stroke='%233FD69A'/%3E%3Cpath d='M23 13 L17 14.5 L17 16 L23 15.5 Z' fill='%233FD69A' stroke='%233FD69A'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="css/industry.css">
+<link rel="stylesheet" href="css/doom.css">
+</head>
+<body>
+<div id="boot" class="boot">Estabelecendo conexão com Latvéria…</div>
+<div id="demo-banner" class="demo-banner" hidden>
+  MODO DEMO — os dados ficam só neste navegador. Configure o Firebase em <code>js/firebase-config.js</code> para compartilhar com os amigos (veja o README).
+</div>
+
+<!-- ── LOGIN ─────────────────────────────────────────────────────────── -->
+<section id="login" class="login" hidden>
+  <div class="blueprint login-card">
+    <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+    <div class="login-brand">
+      <div class="blueprint emblem">
+        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+        <svg width="30" height="34" viewBox="0 0 30 34" fill="none" stroke="#D4AF37" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M3 5 Q15 0 27 5 L27 20 Q27 29 15 33 Q3 29 3 20 Z"/><path d="M7 13 L13 14.5 L13 16 L7 15.5 Z" fill="#3FD69A" stroke="#3FD69A"/><path d="M23 13 L17 14.5 L17 16 L23 15.5 Z" fill="#3FD69A" stroke="#3FD69A"/><path d="M15 7 L15 20"/><path d="M10 23 L20 23 M11 26 L19 26 M12.5 29 L17.5 29"/></svg>
+      </div>
+      <div>
+        <div class="brand-kicker">Acesso restrito · Latvéria</div>
+        <h1>Doom Protocol <span class="gold">//</span> <span class="neon">Rumo a Doomsday</span></h1>
+      </div>
+    </div>
+    <div class="login-tabs" role="tablist">
+      <button type="button" role="tab" data-tab="signin" aria-selected="true">Entrar</button>
+      <button type="button" role="tab" data-tab="signup" aria-selected="false">Criar conta</button>
+    </div>
+    <form id="login-form" novalidate>
+      <div class="field">
+        <label for="f-user">Usuário</label>
+        <input id="f-user" class="input" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" required maxlength="20">
+        <div class="field-hint" data-signup-only hidden>3 a 20 caracteres: letras, números, ponto, hífen ou _</div>
+      </div>
+      <div class="field">
+        <label for="f-pass">Senha</label>
+        <input id="f-pass" class="input" name="password" type="password" autocomplete="current-password" required minlength="6">
+      </div>
+      <div class="field" data-signup-only hidden>
+        <label for="f-pass2">Confirmar senha</label>
+        <input id="f-pass2" class="input" name="password2" type="password" autocomplete="new-password" minlength="6">
+      </div>
+      <div id="login-error" class="form-error" role="alert" hidden></div>
+      <button id="login-submit" class="btn btn-primary btn-block blueprint btn-doom" type="submit">
+        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+        <span>Entrar no protocolo</span>
+      </button>
+    </form>
+  </div>
+</section>
+
+<!-- ── APP ───────────────────────────────────────────────────────────── -->
+<div id="app" class="page" hidden>
+  <header class="header" id="header">
+    <div class="header-top">
+      <div class="brand">
+        <div class="blueprint emblem">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <svg width="30" height="34" viewBox="0 0 30 34" fill="none" stroke="#D4AF37" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M3 5 Q15 0 27 5 L27 20 Q27 29 15 33 Q3 29 3 20 Z"/><path d="M7 13 L13 14.5 L13 16 L7 15.5 Z" fill="#3FD69A" stroke="#3FD69A"/><path d="M23 13 L17 14.5 L17 16 L23 15.5 Z" fill="#3FD69A" stroke="#3FD69A"/><path d="M15 7 L15 20"/><path d="M10 23 L20 23 M11 26 L19 26 M12.5 29 L17.5 29"/></svg>
+        </div>
+        <div style="min-width:0">
+          <div class="brand-kicker">Arquivo Soberano · Latvéria · Autorização Ômega</div>
+          <h1>Doom Protocol <span class="gold">//</span> Linha do Tempo: <span class="neon">Rumo a Doomsday</span></h1>
+        </div>
+      </div>
+      <div class="blueprint progress-card">
+        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+        <div class="progress-head">
+          <span class="progress-title">Convergência do Multiverso</span>
+          <span class="progress-pct" id="pct">0%</span>
+        </div>
+        <div class="bar"><i id="pct-bar" style="width:0%"></i></div>
+        <div class="progress-label" id="progress-label"></div>
+      </div>
+    </div>
+    <div class="filters">
+      <span class="filters-label">Diretiva de filtro</span>
+      <div id="scope-pills" style="display:contents"></div>
+      <div class="vsep"></div>
+      <div class="seg-pills" id="status-pills"></div>
+      <div class="filters-end">
+        <span class="showing" id="showing"></span>
+        <span class="agent">Agente <b id="agent-name"></b> <button class="link-btn" type="button" data-action="signout">Sair</button></span>
+      </div>
+    </div>
+  </header>
+
+  <div class="body">
+    <main class="timeline" id="timeline">
+      <div class="spine"></div>
+      <div class="rows" id="rows"></div>
+    </main>
+    <div id="aside-slot" style="display:contents"></div>
+  </div>
+
+  <div id="toast" class="blueprint toast" role="status" hidden>
+    <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+    <span></span>
+  </div>
+</div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

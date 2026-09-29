@@ -1,0 +1,31 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Um documento por pessoa: progress/{uid}
+    //   { username: string, watched: { movieId: true }, ratings: { movieId: 1..5 }, updatedAt: timestamp }
+    match /progress/{uid} {
+      // Qualquer amigo logado pode ver o progresso e as notas de todos.
+      allow read: if request.auth != null;
+
+      // Cada um só escreve no próprio documento.
+      allow create, update: if request.auth != null
+        && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['username', 'watched', 'ratings', 'updatedAt'])
+        && request.resource.data.username is string
+        && request.resource.data.username.size() > 0
+        && request.resource.data.username.size() <= 24
+        && request.resource.data.watched is map
+        && request.resource.data.ratings is map
+        && request.resource.data.watched.size() <= 300
+        && request.resource.data.ratings.size() <= 300;
+
+      allow delete: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // Todo o resto fica fechado.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
