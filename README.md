@@ -3,7 +3,7 @@
 Site para você e seus amigos marcarem os filmes e séries que precisam ver antes de **Vingadores: Doomsday** (18/12/2026) e darem nota para cada um.
 
 - Contas com **usuário + senha** (sem e-mail real)
-- Linha do tempo com **74 títulos**: essenciais, resto do MCU e outros universos (X-Men da Fox, Homem-Aranha da Sony, Quarteto Fantástico de 2005/2007)
+- Linha do tempo em estilo *scrollytelling* (galho do multiverso que acende conforme você rola, um título em foco por vez; setas ↑/↓ também navegam) com **74 títulos**: essenciais, resto do MCU e outros universos (X-Men da Fox, Homem-Aranha da Sony, Quarteto Fantástico de 2005/2007)
 - Filtros: Essenciais · Multiverso · MCU completo · Outros universos · Tudo · Assistidos / Não assistidos
 - Nota de 1 a 5 estrelas; em cada título aparece a **média do grupo** e quem já assistiu
 - Painel lateral: sua nota média, tempo que falta assistir, próximo alvo, **ranking dos amigos** ("Conselho de Latvéria") e contagem regressiva
@@ -43,21 +43,20 @@ Sem configurar o Firebase, o site roda em **modo demo**: as contas e notas ficam
 
 - **Lista de títulos**: [`js/movies.js`](js/movies.js). Cada item tem `essential`, `multiverse`, `universe`, tags e resumo. Não mude o `id` de um título depois que o pessoal já avaliou (as notas ficam presas a ele).
 - **Pôsteres**: o site busca sozinho a imagem principal da página de cada título na Wikipedia (em inglês), direto do navegador e sem chave, e guarda em cache por 7 dias. Os nomes das páginas estão em [`js/posters.js`](js/posters.js). Se algum não carregar (ou vier errado), ajuste o nome da página ali ou force uma imagem com `poster: 'https://…'` no item em `js/movies.js`. Sem imagem, o card mostra uma capa gerada no estilo do site.
-- **Visual**: [`css/doom.css`](css/doom.css) (tema) sobre [`css/industry.css`](css/industry.css) (design system base).
+- **Visual**: [`css/doom.css`](css/doom.css). Frases do "Arquivo Doom" de cada título: `DOOM_LINES` em `js/movies.js`.
 
 ## Estrutura
 
 ```
 index.html              página (login + linha do tempo)
-css/industry.css        design system "Industry" (do protótipo)
-css/doom.css            tema Doom Protocol
+css/doom.css            visual (galho, cards de vidro, painel)
 js/app.js               interface: timeline, filtros, estrelas, painel, ranking
 js/store.js             contas e dados (Firebase ou modo demo)
 js/movies.js            lista de títulos
 js/posters.js           busca dos pôsteres na Wikipedia
 js/firebase-config.js   configuração do seu projeto Firebase
 firestore.rules         regras de segurança do banco
-assets/multiverso.png   arte de fundo do login
+assets/multiverso.png   arte de fundo
 ```
 
 ## Dados no Firestore
