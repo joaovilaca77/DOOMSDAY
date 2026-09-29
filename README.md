@@ -10,7 +10,7 @@ Site para você e seus amigos marcarem os filmes e séries que precisam ver ante
   - Terra-96283 (Homem-Aranha de Sam Raimi) e Terra-120703 (O Espetacular Homem-Aranha) → em Sem Volta para Casa
   - Terra-92131 (X-Men '97) → em As Marvels · Multiverso do Vigia (What If…?) → em Loki T1
   - Terra-828 (Quarteto Fantástico: Primeiros Passos) → em Thunderbolts*, antes de Doomsday
-  - Os essenciais de outras Terras (X-Men, X2, Deadpool & Wolverine, Primeiros Passos) aparecem nos portais com destaque, e esses portais já vêm abertos
+  - **Todos os essenciais ficam sempre à mostra** como cards grandes — inclusive os de outras Terras (X-Men, X2, Deadpool & Wolverine, Primeiros Passos), que aparecem no galho dourado do portal mesmo com ele fechado; abrir o portal mostra o resto daquela Terra
 - Tudo em **ordem cronológica da história** (MCU pela linha do tempo do Disney+; Fox/Sony pelo ano em que se passam), com a época de cada título
 - Nota de 1 a 5 estrelas; em cada título aparece a **média do grupo** e quem já assistiu
 - Painel lateral: sua nota média, tempo que falta assistir, próximo alvo, **ranking dos amigos** ("Conselho de Latvéria") e contagem regressiva
@@ -54,7 +54,7 @@ Sem configurar o Firebase, o site roda em **modo demo**: as contas e notas ficam
 
 ## Publicar uma mudança
 
-O GitHub Pages deixa os arquivos em cache por alguns minutos. Para ninguém ficar com uma mistura de versão nova e antiga, aumente o número `?v=` (hoje `12`) em todos os lugares onde ele aparece — `index.html`, `js/app.js` e `js/store.js` (busque por `?v=`).
+O GitHub Pages deixa os arquivos em cache por alguns minutos. Para ninguém ficar com uma mistura de versão nova e antiga, aumente o número `?v=` (hoje `13`) em todos os lugares onde ele aparece — `index.html`, `js/app.js` e `js/store.js` (busque por `?v=`).
 
 ## Estrutura
 
