@@ -1,7 +1,7 @@
 // Camada de dados: contas + progresso de cada pessoa.
 // Usa o Firebase quando js/firebase-config.js está preenchido; senão cai no MODO DEMO,
 // que guarda tudo no localStorage deste navegador (útil para testar o visual).
-import { firebaseConfig } from './firebase-config.js';
+import { firebaseConfig } from './firebase-config.js?v=10';
 
 const SDK = 'https://www.gstatic.com/firebasejs/10.12.2';
 const EMAIL_DOMAIN = 'doomsday.app';

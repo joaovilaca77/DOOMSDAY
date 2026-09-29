@@ -1,6 +1,6 @@
-import { MOVIES, RELEASE_DATE, DOOM_LINES } from './movies.js';
-import { createStore, friendlyError } from './store.js';
-import { loadPosters } from './posters.js';
+import { MOVIES, RELEASE_DATE, DOOM_LINES } from './movies.js?v=10';
+import { createStore, friendlyError } from './store.js?v=10';
+import { loadPosters } from './posters.js?v=10';
 
 const $ = sel => document.querySelector(sel);
 const PREFS_KEY = 'doomProtocol.prefs.v3';

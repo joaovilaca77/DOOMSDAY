@@ -46,6 +46,10 @@ Sem configurar o Firebase, o site roda em **modo demo**: as contas e notas ficam
 - **Pôsteres**: o site busca sozinho a imagem principal da página de cada título na Wikipedia (em inglês), direto do navegador e sem chave, e guarda em cache por 7 dias. Os nomes das páginas estão em [`js/posters.js`](js/posters.js). Se algum não carregar (ou vier errado), ajuste o nome da página ali ou force uma imagem com `poster: 'https://…'` no item em `js/movies.js`. Sem imagem, o card mostra uma capa gerada no estilo do site.
 - **Visual**: [`css/doom.css`](css/doom.css). Frases do "Arquivo Doom" de cada título: `DOOM_LINES` em `js/movies.js`.
 
+## Publicar uma mudança
+
+O GitHub Pages deixa os arquivos em cache por alguns minutos. Para ninguém ficar com uma mistura de versão nova e antiga, aumente o número `?v=` (hoje `10`) em todos os lugares onde ele aparece — `index.html`, `js/app.js` e `js/store.js` (busque por `?v=`).
+
 ## Estrutura
 
 ```
