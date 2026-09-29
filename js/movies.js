@@ -7,7 +7,8 @@
 //   kind       "Filme" ou "Série · N Ep"
 //   phase      fase do MCU ou estúdio de origem
 //   universe   'mcu' | 'fox' | 'sony'
-//   essential  indispensável para entender Doomsday
+//   essential  tronco principal: lista oficial da Disney do que ver antes de Doomsday
+//              (os demais aparecem como ramificações entre os essenciais)
 //   multiverse faz parte da saga do multiverso / incursões
 //   tags       [rótulo, tom] — tom: 'gold' | 'emerald' | 'steel'
 //   brief      resumo de uma linha
@@ -18,9 +19,9 @@ export const RELEASE_DATE = new Date(2026, 11, 18);
 
 export const MOVIES = [
   // ── Outros universos: Fox / Sony (anos 2000) ──────────────────────────
-  { id:'xmen', title:'X-Men: O Filme', year:2000, runtime:104, kind:'Filme', phase:'FOX', universe:'fox', essential:false, multiverse:true, tags:[['Elenco de Doomsday','gold']], brief:'Xavier, Magneto e Ciclope: a equipe original que volta em Doomsday.' },
+  { id:'xmen', title:'X-Men: O Filme', year:2000, runtime:104, kind:'Filme', phase:'FOX', universe:'fox', essential:true, multiverse:true, tags:[['Elenco de Doomsday','gold']], brief:'Xavier, Magneto e Ciclope: a equipe original que volta em Doomsday.' },
   { id:'spider1', title:'Homem-Aranha', year:2002, runtime:121, kind:'Filme', phase:'SONY', universe:'sony', essential:false, multiverse:true, tags:[['Variante de Sem Volta para Casa','steel']], brief:'O Peter Parker de Tobey Maguire ganha seus poderes.' },
-  { id:'x2', title:'X-Men 2', year:2003, runtime:134, kind:'Filme', phase:'FOX', universe:'fox', essential:false, multiverse:true, tags:[['Elenco de Doomsday','gold']], brief:'Noturno e Stryker; a Fênix começa a despertar.' },
+  { id:'x2', title:'X-Men 2', year:2003, runtime:134, kind:'Filme', phase:'FOX', universe:'fox', essential:true, multiverse:true, tags:[['Elenco de Doomsday','gold']], brief:'Noturno e Stryker; a Fênix começa a despertar.' },
   { id:'spider2', title:'Homem-Aranha 2', year:2004, runtime:127, kind:'Filme', phase:'SONY', universe:'sony', essential:false, multiverse:true, tags:[['Doutor Octopus','steel']], brief:'Doc Ock — que depois atravessa para o MCU.' },
   { id:'ff2005', title:'Quarteto Fantástico', year:2005, runtime:106, kind:'Filme', phase:'FOX', universe:'fox', essential:false, multiverse:false, tags:[['Primeiro Doom do cinema','gold']], brief:'A primeira família e um Victor Von Doom de terno.' },
   { id:'x3', title:'X-Men: O Confronto Final', year:2006, runtime:104, kind:'Filme', phase:'FOX', universe:'fox', essential:false, multiverse:true, tags:[['Fim da trilogia original','steel']], brief:'A cura mutante e a Fênix Negra.' },
@@ -32,8 +33,8 @@ export const MOVIES = [
   { id:'hulk', title:'O Incrível Hulk', year:2008, runtime:112, kind:'Filme', phase:'FASE 1', universe:'mcu', essential:false, multiverse:false, tags:[['Ross & Samuel Sterns','steel']], brief:'Bruce Banner em fuga do General Ross.' },
   { id:'ironman2', title:'Homem de Ferro 2', year:2010, runtime:124, kind:'Filme', phase:'FASE 1', universe:'mcu', essential:false, multiverse:false, tags:[['Iniciativa Vingadores','steel']], brief:'Máquina de Combate e a Viúva Negra entram em cena.' },
   { id:'thor', title:'Thor', year:2011, runtime:115, kind:'Filme', phase:'FASE 1', universe:'mcu', essential:false, multiverse:false, tags:[['Origem de Loki','emerald']], brief:'Thor é banido e Loki mostra quem é.' },
-  { id:'cap1', title:'Capitão América: O Primeiro Vingador', year:2011, runtime:124, kind:'Filme', phase:'FASE 1', universe:'mcu', essential:false, multiverse:false, tags:[['Joia do Espaço','steel']], brief:'Steve Rogers, a Hydra e o Tesseract.' },
-  { id:'avengers', title:'Os Vingadores', year:2012, runtime:143, kind:'Filme', phase:'FASE 1', universe:'mcu', essential:false, multiverse:false, tags:[['Os Vingadores se formam','steel']], brief:'A primeira reunião dos heróis mais poderosos da Terra.' },
+  { id:'cap1', title:'Capitão América: O Primeiro Vingador', year:2011, runtime:124, kind:'Filme', phase:'FASE 1', universe:'mcu', essential:true, multiverse:false, tags:[['Joia do Espaço','steel']], brief:'Steve Rogers, a Hydra e o Tesseract.' },
+  { id:'avengers', title:'Os Vingadores', year:2012, runtime:143, kind:'Filme', phase:'FASE 1', universe:'mcu', essential:true, multiverse:false, tags:[['Os Vingadores se formam','steel']], brief:'A primeira reunião dos heróis mais poderosos da Terra.' },
 
   // ── Anos 2010 fora do MCU ────────────────────────────────────────────
   { id:'firstclass', title:'X-Men: Primeira Classe', year:2011, runtime:132, kind:'Filme', phase:'FOX', universe:'fox', essential:false, multiverse:false, tags:[['Xavier & Magneto jovens','steel']], brief:'Como Charles e Erik se tornaram amigos — e inimigos.' },
@@ -74,7 +75,7 @@ export const MOVIES = [
   { id:'loki1', title:'Loki — 1ª Temporada', year:2021, runtime:305, kind:'Série · 6 Ep', phase:'FASE 4', universe:'mcu', essential:true, multiverse:true, tags:[['Âncora do Multiverso','emerald'],['Risco de Incursão: Alto','gold']], brief:'A Linha do Tempo Sagrada se rompe. Aquele Que Permanece cai.' },
   { id:'blackwidow', title:'Viúva Negra', year:2021, runtime:134, kind:'Filme', phase:'FASE 4', universe:'mcu', essential:false, multiverse:false, tags:[['Origem de Yelena','emerald']], brief:'Natasha, Yelena e o Guardião Vermelho.' },
   { id:'whatif1', title:'What If...? — 1ª Temporada', year:2021, runtime:300, kind:'Série · 9 Ep', phase:'FASE 4', universe:'mcu', essential:false, multiverse:true, tags:[['Catálogo de Variantes','steel']], brief:'O Vigia observa realidades alternativas.' },
-  { id:'shangchi', title:'Shang-Chi e a Lenda dos Dez Anéis', year:2021, runtime:132, kind:'Filme', phase:'FASE 4', universe:'mcu', essential:false, multiverse:false, tags:[['Os Dez Anéis','steel']], brief:'O filho de Wenwu enfrenta o legado do pai.' },
+  { id:'shangchi', title:'Shang-Chi e a Lenda dos Dez Anéis', year:2021, runtime:132, kind:'Filme', phase:'FASE 4', universe:'mcu', essential:true, multiverse:false, tags:[['Os Dez Anéis','steel']], brief:'O filho de Wenwu enfrenta o legado do pai.' },
   { id:'eternals', title:'Eternos', year:2021, runtime:156, kind:'Filme', phase:'FASE 4', universe:'mcu', essential:false, multiverse:false, tags:[['Hierarquia Cósmica','steel']], brief:'Os Celestiais revelam a escala do que existe além da Terra.' },
   { id:'hawkeye', title:'Gavião Arqueiro', year:2021, runtime:290, kind:'Série · 6 Ep', phase:'FASE 4', universe:'mcu', essential:false, multiverse:false, tags:[['Kate Bishop','steel']], brief:'Clint Barton passa o arco para Kate Bishop.' },
   { id:'nwh', title:'Homem-Aranha: Sem Volta para Casa', year:2021, runtime:148, kind:'Filme', phase:'FASE 4', universe:'mcu', essential:true, multiverse:true, tags:[['Risco de Incursão: Alto','gold'],['Âncora do Multiverso','emerald']], brief:'Um feitiço mal feito derruba as paredes entre mundos.' },
@@ -83,7 +84,7 @@ export const MOVIES = [
   { id:'msmarvel', title:'Ms. Marvel', year:2022, runtime:280, kind:'Série · 6 Ep', phase:'FASE 4', universe:'mcu', essential:false, multiverse:false, tags:[['"Mutante"','steel']], brief:'Kamala Khan — e a primeira palavra "mutante" do MCU.' },
   { id:'loveandthunder', title:'Thor: Amor e Trovão', year:2022, runtime:119, kind:'Filme', phase:'FASE 4', universe:'mcu', essential:false, multiverse:false, tags:[['Gorr','steel']], brief:'Thor, Jane Foster e o Carniceiro dos Deuses.' },
   { id:'shehulk', title:'Mulher-Hulk: Defensora de Heróis', year:2022, runtime:290, kind:'Série · 9 Ep', phase:'FASE 4', universe:'mcu', essential:false, multiverse:false, tags:[['Comédia jurídica','steel']], brief:'Jennifer Walters advoga para super-humanos.' },
-  { id:'wakanda', title:'Pantera Negra: Wakanda para Sempre', year:2022, runtime:161, kind:'Filme', phase:'FASE 4', universe:'mcu', essential:false, multiverse:false, tags:[['Namor & Talokan','emerald'],['Elenco de Doomsday','gold']], brief:'Shuri assume o manto; Namor surge das profundezas.' },
+  { id:'wakanda', title:'Pantera Negra: Wakanda para Sempre', year:2022, runtime:161, kind:'Filme', phase:'FASE 4', universe:'mcu', essential:true, multiverse:false, tags:[['Namor & Talokan','emerald'],['Elenco de Doomsday','gold']], brief:'Shuri assume o manto; Namor surge das profundezas.' },
 
   // ── MCU Fase 5 ───────────────────────────────────────────────────────
   { id:'quantumania', title:'Homem-Formiga e a Vespa: Quantumania', year:2023, runtime:125, kind:'Filme', phase:'FASE 5', universe:'mcu', essential:false, multiverse:true, tags:[['Conselho dos Kangs','steel']], brief:'O Reino Quântico esconde um conquistador exilado.' },
@@ -97,23 +98,15 @@ export const MOVIES = [
   { id:'dw', title:'Deadpool & Wolverine', year:2024, runtime:128, kind:'Filme', phase:'FASE 5', universe:'mcu', essential:true, multiverse:true, tags:[['Protocolo do Ser Âncora','emerald'],['Risco de Incursão: Médio','gold']], brief:'A AVT poda uma linha do tempo moribunda. O Vazio cresce.' },
   { id:'agatha', title:'Agatha Desde Sempre', year:2024, runtime:330, kind:'Série · 9 Ep', phase:'FASE 5', universe:'mcu', essential:false, multiverse:false, tags:[['Estrada das Bruxas','steel']], brief:'Agatha Harkness busca recuperar seus poderes.' },
   { id:'whatif3', title:'What If...? — 3ª Temporada', year:2024, runtime:260, kind:'Série · 8 Ep', phase:'FASE 5', universe:'mcu', essential:false, multiverse:true, tags:[['Catálogo de Variantes','steel']], brief:'O último arquivo do Vigia.' },
-  { id:'bnw', title:'Capitão América: Admirável Mundo Novo', year:2025, runtime:118, kind:'Filme', phase:'FASE 5', universe:'mcu', essential:false, multiverse:false, tags:[['Hulk Vermelho','steel']], brief:'Sam Wilson como Capitão América diante do Presidente Ross.' },
+  { id:'bnw', title:'Capitão América: Admirável Mundo Novo', year:2025, runtime:118, kind:'Filme', phase:'FASE 5', universe:'mcu', essential:true, multiverse:false, tags:[['Hulk Vermelho','steel']], brief:'Sam Wilson como Capitão América diante do Presidente Ross.' },
   { id:'daredevil', title:'Demolidor: Renascido', year:2025, runtime:400, kind:'Série · 9 Ep', phase:'FASE 5', universe:'mcu', essential:false, multiverse:false, tags:[['Hell\'s Kitchen','steel']], brief:'Matt Murdock contra o prefeito Wilson Fisk.' },
   { id:'tbolts', title:'Thunderbolts*', year:2025, runtime:127, kind:'Filme', phase:'FASE 5', universe:'mcu', essential:true, multiverse:false, tags:[['Nova Formação dos Vingadores','steel']], brief:'Agentes descartáveis se tornam algo maior.' },
   { id:'ironheart', title:'Coração de Ferro', year:2025, runtime:260, kind:'Série · 6 Ep', phase:'FASE 5', universe:'mcu', essential:false, multiverse:false, tags:[['Riri Williams','steel']], brief:'Riri Williams mistura tecnologia e magia.' },
 
   // ── MCU Fase 6 ───────────────────────────────────────────────────────
   { id:'ff', title:'Quarteto Fantástico: Primeiros Passos', year:2025, runtime:115, kind:'Filme', phase:'FASE 6', universe:'mcu', essential:true, multiverse:true, tags:[['Nexo de Origem do Doutor Destino','gold'],['Terra-828','emerald']], brief:'A Primeira Família da Terra-828 enfrenta Galactus. Destino desperta.' },
-  { id:'bnd', title:'Homem-Aranha: Um Novo Dia', year:2026, runtime:null, kind:'Filme', phase:'FASE 6', universe:'mcu', essential:true, multiverse:false, tags:[['Pós-Sem Volta para Casa','steel']], brief:'Um Peter Parker esquecido por todos recomeça sozinho.' },
+  { id:'bnd', title:'Homem-Aranha: Um Novo Dia', year:2026, runtime:null, kind:'Filme', phase:'FASE 6', universe:'mcu', essential:false, multiverse:false, tags:[['Pós-Sem Volta para Casa','steel']], brief:'Um Peter Parker esquecido por todos recomeça sozinho.' },
   { id:'doomsday', title:'Vingadores: Doomsday', year:2026, runtime:null, kind:'Filme', phase:'FASE 6', universe:'mcu', essential:true, multiverse:true, unreleased:true, tags:[['O Soberano Chega','gold'],['Risco de Incursão: Crítico','gold']], brief:'Victor Von Doom reivindica o multiverso.' },
-];
-
-export const SCOPES = [
-  ['essential', 'Essenciais', m => m.essential],
-  ['multiverse', 'Multiverso', m => m.multiverse],
-  ['mcu', 'MCU completo', m => m.universe === 'mcu'],
-  ['others', 'Outros universos', m => m.universe !== 'mcu'],
-  ['all', 'Tudo', () => true],
 ];
 
 // Frase do "Arquivo Doom" exibida quando o título está em foco.
