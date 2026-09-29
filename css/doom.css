@@ -30,10 +30,12 @@ h1, h2, h3 { margin: 0; }
 .lit { color: var(--lit); text-shadow: 0 0 14px rgba(108,255,154,.45); }
 
 /* ── Fundo ─────────────────────────────────────────────────────────── */
-.bg-art { position: fixed; inset: 0; pointer-events: none; z-index: 0; background: url('../assets/multiverso.png') center/cover no-repeat; opacity: .55; }
+.bg-art { position: fixed; inset: 0; pointer-events: none; z-index: 0; background: url('../assets/doom-bg.jpg') 60% 25%/cover no-repeat; opacity: .8; }
+/* Puxa o céu laranja para o verde do site. */
+.bg-art::before { content: ""; position: absolute; inset: 0; background: rgba(40,140,90,.22); mix-blend-mode: color; }
 .bg-art::after { content: ""; position: absolute; inset: 0; background:
-  linear-gradient(90deg, rgba(4,7,5,.9) 0%, rgba(4,7,5,.6) 45%, rgba(4,7,5,.75) 75%, rgba(4,7,5,.92) 100%),
-  linear-gradient(rgba(4,7,5,.6), rgba(4,7,5,0) 20%, rgba(4,7,5,0) 80%, rgba(4,7,5,.8)); }
+  linear-gradient(90deg, rgba(4,7,5,.92) 0%, rgba(4,7,5,.62) 45%, rgba(4,7,5,.6) 75%, rgba(4,7,5,.9) 100%),
+  linear-gradient(rgba(4,7,5,.55), rgba(4,7,5,0) 22%, rgba(4,7,5,0) 75%, rgba(4,7,5,.85)); }
 .bg-stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: .35;
   background-image: radial-gradient(rgba(255,255,255,.5) .7px, transparent 1.2px), radial-gradient(rgba(255,255,255,.28) .6px, transparent 1px);
   background-size: 190px 170px, 83px 97px; background-position: 0 0, 40px 60px; }
@@ -277,6 +279,7 @@ h1, h2, h3 { margin: 0; }
   .scrim { position: fixed; inset: 0; z-index: 29; background: rgba(0,0,0,.5); }
 }
 @media (max-width: 760px) {
+  .bg-art { background-position: 55% 20%; }
   .card { padding: 14px; gap: 12px; border-radius: 22px; flex-direction: column; }
   .poster-frame { width: 92px; border-radius: 16px; position: absolute; top: 14px; right: 14px; padding: 2px; }
   .poster { border-radius: 14px; }

@@ -56,7 +56,7 @@ js/movies.js            lista de títulos
 js/posters.js           busca dos pôsteres na Wikipedia
 js/firebase-config.js   configuração do seu projeto Firebase
 firestore.rules         regras de segurança do banco
-assets/multiverso.png   arte de fundo
+assets/doom-bg.jpg      arte de fundo (Doutor Destino)
 ```
 
 ## Dados no Firestore
