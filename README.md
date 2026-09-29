@@ -5,7 +5,8 @@ Site para você e seus amigos marcarem os filmes e séries que precisam ver ante
 - Contas com **usuário + senha** (sem e-mail real)
 - Linha do tempo em estilo *scrollytelling* (galho do multiverso que acende conforme você rola, um título em foco por vez; setas ↑/↓ também navegam)
 - **Tronco principal com os 17 essenciais** da lista oficial da Disney (X-Men, X2, Capitão América: O Primeiro Vingador, Os Vingadores, Guerra Infinita, Ultimato, Loki T1 e T2, Shang-Chi, Sem Volta para Casa, Multiverso da Loucura, Wakanda para Sempre, Deadpool & Wolverine, Admirável Mundo Novo, Thunderbolts*, Quarteto Fantástico: Primeiros Passos e o próprio Doomsday)
-- **57 ramificações**: o resto do MCU, Fox e Sony aparece em galhos recolhíveis entre os essenciais, na ordem de lançamento
+- **57 ramificações**: o resto do MCU, Fox e Sony aparece em galhos recolhíveis entre os essenciais
+- Tudo em **ordem cronológica da história** (MCU pela linha do tempo do Disney+; Fox/Sony pelo ano em que se passam), com a época de cada título
 - Nota de 1 a 5 estrelas; em cada título aparece a **média do grupo** e quem já assistiu
 - Painel lateral: sua nota média, tempo que falta assistir, próximo alvo, **ranking dos amigos** ("Conselho de Latvéria") e contagem regressiva
 - Tudo em tempo real: quando um amigo marca algo, aparece na sua tela na hora
@@ -48,7 +49,7 @@ Sem configurar o Firebase, o site roda em **modo demo**: as contas e notas ficam
 
 ## Publicar uma mudança
 
-O GitHub Pages deixa os arquivos em cache por alguns minutos. Para ninguém ficar com uma mistura de versão nova e antiga, aumente o número `?v=` (hoje `10`) em todos os lugares onde ele aparece — `index.html`, `js/app.js` e `js/store.js` (busque por `?v=`).
+O GitHub Pages deixa os arquivos em cache por alguns minutos. Para ninguém ficar com uma mistura de versão nova e antiga, aumente o número `?v=` (hoje `11`) em todos os lugares onde ele aparece — `index.html`, `js/app.js` e `js/store.js` (busque por `?v=`).
 
 ## Estrutura
 

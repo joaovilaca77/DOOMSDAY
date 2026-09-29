@@ -1,6 +1,6 @@
-import { MOVIES, RELEASE_DATE, DOOM_LINES } from './movies.js?v=10';
-import { createStore, friendlyError } from './store.js?v=10';
-import { loadPosters } from './posters.js?v=10';
+import { MOVIES, RELEASE_DATE, DOOM_LINES } from './movies.js?v=11';
+import { createStore, friendlyError } from './store.js?v=11';
+import { loadPosters } from './posters.js?v=11';
 
 const $ = sel => document.querySelector(sel);
 const PREFS_KEY = 'doomProtocol.prefs.v3';
@@ -138,9 +138,9 @@ function essCardHTML(m, n, nextId) {
       ${w ? '<div class="crest" title="Conquistado"><div><b>LV</b><small>CONQ.</small></div></div>' : ''}
       <h2>${esc(m.title)}</h2>
       <div class="facts">
-        <div class="fact"><div class="l">LANÇAMENTO</div><div class="v">${m.unreleased ? '18.12.2026' : m.year}</div></div>
+        <div class="fact"><div class="l">ÉPOCA</div><div class="v">${esc(m.era)}</div></div>
         <div class="fact"><div class="l">DURAÇÃO</div><div class="v">${m.runtime ? hm(m.runtime) : (m.unreleased ? 'CLASSIFICADA' : '—')}</div></div>
-        <div class="fact"><div class="l">FORMATO</div><div class="v">${esc(m.kind)}</div></div>
+        <div class="fact"><div class="l">LANÇAMENTO</div><div class="v">${m.unreleased ? '18.12.2026' : m.year} · ${esc(m.kind)}</div></div>
       </div>
       <p class="brief">${esc(m.brief)}</p>
       <div class="tags">${m.tags.map(([label, tone]) => `<span class="tag tone-${tone}">${esc(label)}</span>`).join('')}</div>
@@ -162,7 +162,7 @@ function branchCardHTML(m) {
   return `<article class="bcard${w ? ' done' : ''}">
     <div class="bposter">${posterHTML(m)}</div>
     <div class="bbody">
-      <div class="kicker">Ramificação · ${esc(m.phase)} · ${m.year}${m.runtime ? ' · ' + hm(m.runtime) : ''}</div>
+      <div class="kicker">Época ${esc(m.era)} · ${esc(m.phase)} · lançado em ${m.year}${m.runtime ? ' · ' + hm(m.runtime) : ''}</div>
       <h3>${esc(m.title)}</h3>
       <div class="bcontrols">
         <button type="button" class="conquer sm${w ? ' on' : ''}" data-action="toggle" data-id="${m.id}" aria-pressed="${w}">${w ? CHECK + 'Conquistado' : 'Conquistar'}</button>
