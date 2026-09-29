@@ -42,7 +42,7 @@ Sem configurar o Firebase, o site roda em **modo demo**: as contas e notas ficam
 ## Personalizar
 
 - **Lista de títulos**: [`js/movies.js`](js/movies.js). Cada item tem `essential`, `multiverse`, `universe`, tags e resumo. Não mude o `id` de um título depois que o pessoal já avaliou (as notas ficam presas a ele).
-- **Pôsteres**: por padrão cada card mostra uma capa gerada no estilo do site. Para usar o pôster real, adicione `poster: 'https://…'` ao item (ex.: uma URL de `https://image.tmdb.org/t/p/w342/...`).
+- **Pôsteres**: o site busca sozinho a imagem principal da página de cada título na Wikipedia (em inglês), direto do navegador e sem chave, e guarda em cache por 7 dias. Os nomes das páginas estão em [`js/posters.js`](js/posters.js). Se algum não carregar (ou vier errado), ajuste o nome da página ali ou force uma imagem com `poster: 'https://…'` no item em `js/movies.js`. Sem imagem, o card mostra uma capa gerada no estilo do site.
 - **Visual**: [`css/doom.css`](css/doom.css) (tema) sobre [`css/industry.css`](css/industry.css) (design system base).
 
 ## Estrutura
@@ -54,6 +54,7 @@ css/doom.css            tema Doom Protocol
 js/app.js               interface: timeline, filtros, estrelas, painel, ranking
 js/store.js             contas e dados (Firebase ou modo demo)
 js/movies.js            lista de títulos
+js/posters.js           busca dos pôsteres na Wikipedia
 js/firebase-config.js   configuração do seu projeto Firebase
 firestore.rules         regras de segurança do banco
 assets/multiverso.png   arte de fundo do login

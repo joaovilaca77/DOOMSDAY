@@ -1,5 +1,6 @@
 import { MOVIES, SCOPES, RELEASE_DATE } from './movies.js';
 import { createStore, friendlyError } from './store.js';
+import { loadPosters } from './posters.js';
 
 const $ = sel => document.querySelector(sel);
 const PREFS_KEY = 'doomProtocol.prefs.v1';
@@ -29,6 +30,7 @@ const savePrefs = () => { try { localStorage.setItem(PREFS_KEY, JSON.stringify(p
 
 let store, me = null, everyone = new Map(), unsubData = null, narrow = false;
 const openCrews = new Set();
+let posters = {};
 
 const mine = () => everyone.get(me?.uid) || { watched: {}, ratings: {} };
 const colorFor = uid => AVATAR_COLORS[[...String(uid)].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7) % AVATAR_COLORS.length];
@@ -83,9 +85,10 @@ function render() {
 
 function posterHTML(m, small = false) {
   const cls = m.id === 'doomsday' ? 'pg-doom' : `pg-${m.universe}`;
-  const inner = m.poster
-    ? `<img src="${esc(m.poster)}" alt="Pôster de ${esc(m.title)}" loading="lazy">`
-    : `<div class="poster-gen ${cls}" role="img" aria-label="${esc(m.title)}"><span class="pg-top">${esc(m.phase)}</span><span class="pg-title">${esc(m.title)}</span><span class="pg-year">${m.unreleased ? '18.12.2026' : m.year}</span></div>`;
+  const src = m.poster || posters[m.id];
+  // A capa gerada fica por baixo; se a imagem falhar, ela é removida e a capa aparece.
+  const inner = `<div class="poster-gen ${cls}" role="img" aria-label="${esc(m.title)}"><span class="pg-top">${esc(m.phase)}</span><span class="pg-title">${esc(m.title)}</span><span class="pg-year">${m.unreleased ? '18.12.2026' : m.year}</span></div>`
+    + (src ? `<img src="${esc(src)}" alt="Pôster de ${esc(m.title)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : '');
   return `<div class="frame${small ? ' sm' : ''}"><div class="poster">${inner}</div>${!small && m._watched ? '<div class="seal"><div><small>★ ★ ★</small><span>DOMÍNIO</span><span>APROVADO</span></div></div>' : ''}</div>`;
 }
 
@@ -338,4 +341,5 @@ window.addEventListener('resize', () => document.documentElement.style.setProper
   }
   $('#demo-banner').hidden = store.mode !== 'demo';
   store.onUser(showScreen);
+  loadPosters().then(p => { posters = p; render(); });
 })();
